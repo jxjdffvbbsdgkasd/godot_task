@@ -2,8 +2,8 @@ extends Node2D
 
 @onready var player: CharacterBody2D = $Player
 @onready var enemy: CharacterBody2D = $Enemy
-@onready var hp_label: Label = $CanvasLayer/UIContainer/HPLabel
-@onready var status_label: Label = $CanvasLayer/UIContainer/StatusLabel
+@onready var hp_label: Label = $CanvasLayer/hp
+@onready var status_label: Label = $CanvasLayer/status
 
 func _ready() -> void:
 	if player:
@@ -22,6 +22,9 @@ func _on_player_died() -> void:
 	if status_label:
 		status_label.text = "YOU DIED"
 		status_label.modulate = Color.RED
+	
+	await get_tree().create_timer(5.0).timeout
+	get_tree().reload_current_scene()
 
 func _update_hp_display(hp: float) -> void:
 	if hp_label:

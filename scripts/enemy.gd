@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 @export var speed: float = 120.0
-@export var attack_damage: float = 15.0
+@export var attack_damage: float = 10.0
 @export var attack_cooldown: float = 1.0
 @export var look_ahead_distance: float = 100.0
 @export var debug_draw: bool = true
@@ -21,9 +21,10 @@ var bypass_direction: float = 1.0 # 1.0 = clockwise, -1.0 = counter-clockwise
 var last_wall_normal: Vector2 = Vector2.ZERO
 var chosen_direction: Vector2 = Vector2.ZERO
 
+var freeze: bool = false
+
 func _ready() -> void:
 	add_to_group("enemies")
-	
 	# Initialize 8 direction vectors
 	for i in range(num_rays):
 		var angle := i * (TAU / num_rays)
@@ -33,9 +34,16 @@ func _ready() -> void:
 		final_weights.append(0.0)
 
 func _physics_process(delta: float) -> void:
+	if freeze:
+		velocity = Vector2.ZERO
+		return
+
 	if not target_player or not is_instance_valid(target_player):
 		target_player = get_tree().get_first_node_in_group("player") as Node2D
-		if not target_player:
+		if target_player:
+			if target_player.has_signal("died") and not target_player.died.is_connected(_on_player_died):
+				target_player.died.connect(_on_player_died)
+		else:
 			return
 
 	attack_timer -= delta
@@ -48,7 +56,10 @@ func _physics_process(delta: float) -> void:
 	# Check if player is within attack range
 	if dist_to_player <= 40.0:
 		_attack_player()
-	
+		if freeze:
+			velocity = Vector2.ZERO
+			return
+
 	# 2. Physics sampling (Raycasting)
 	var space_state := get_world_2d().direct_space_state
 	var direct_ray_blocked: bool = false
@@ -138,6 +149,10 @@ func _attack_player() -> void:
 		if target_player.has_method("take_damage"):
 			target_player.take_damage(attack_damage)
 		attack_timer = attack_cooldown
+		
+func _on_player_died() -> void:
+	freeze = true
+	velocity = Vector2.ZERO
 
 func _draw() -> void:
 	if not debug_draw:
