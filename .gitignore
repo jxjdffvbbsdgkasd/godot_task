@@ -1,0 +1,10 @@
+.godot/
+.import/
+export_credentials.cfg
+*.tmp
+*.bak
+*~
+build/
+exports/
+.vscode/
+.idea/

@@ -1,0 +1,117 @@
+[gd_scene format=3 uid="uid://ce3mua21clcc4"]
+
+[ext_resource type="Script" uid="uid://danjjidyi2gti" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="PackedScene" uid="uid://cplayer001" path="res://scenes/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" uid="uid://cenemy0001" path="res://scenes/enemy.tscn" id="3_enemy"]
+[ext_resource type="Script" uid="uid://c0ujjpgnwvrt3" path="res://scripts/color_obstacles.gd" id="4_1bvp3"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_1bvp3"]
+a = Vector2(1150, 1)
+b = Vector2(1, 2)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_lquwl"]
+a = Vector2(1150, 1)
+b = Vector2(1, 2)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_7mycd"]
+a = Vector2(-1, -645)
+b = Vector2(1, 2)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_272bh"]
+a = Vector2(-2, -644)
+b = Vector2(-1, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h2yge"]
+size = Vector2(117.5, 87)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1bvp3"]
+size = Vector2(151, 144)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lquwl"]
+size = Vector2(120, 115.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7mycd"]
+size = Vector2(34.5, 165)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_272bh"]
+size = Vector2(48.5, 215)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5vw27"]
+size = Vector2(91.5, 105)
+
+[node name="Main" type="Node2D" unique_id=239041911]
+script = ExtResource("1_main")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1563695956]
+offset_right = 1152.0
+offset_bottom = 648.0
+color = Color(0.1, 0.12, 0.15, 1)
+
+[node name="Player" parent="." unique_id=144482437 instance=ExtResource("2_player")]
+position = Vector2(250, 324)
+
+[node name="Enemy" parent="." unique_id=825377328 instance=ExtResource("3_enemy")]
+position = Vector2(900, 324)
+
+[node name="bounds" type="StaticBody2D" parent="." unique_id=148899280]
+disable_mode = 2
+
+[node name="top" type="CollisionShape2D" parent="bounds" unique_id=1357452563]
+shape = SubResource("SegmentShape2D_1bvp3")
+one_way_collision_margin = 10.5
+
+[node name="bottom" type="CollisionShape2D" parent="bounds" unique_id=448162490]
+position = Vector2(2, 646)
+shape = SubResource("SegmentShape2D_lquwl")
+
+[node name="left" type="CollisionShape2D" parent="bounds" unique_id=982536135]
+position = Vector2(1, 648)
+shape = SubResource("SegmentShape2D_7mycd")
+
+[node name="right" type="CollisionShape2D" parent="bounds" unique_id=864076743]
+position = Vector2(1153, 644)
+shape = SubResource("SegmentShape2D_272bh")
+
+[node name="obstacles" type="StaticBody2D" parent="." unique_id=1884660402]
+
+[node name="block6" type="CollisionShape2D" parent="obstacles" unique_id=763582442]
+modulate = Color(1, 0.06666667, 1, 1)
+position = Vector2(271, 151)
+shape = SubResource("RectangleShape2D_h2yge")
+debug_color = Color(0.96298605, 0.18686539, 0.14275342, 0.72156864)
+script = ExtResource("4_1bvp3")
+
+[node name="block3" type="CollisionShape2D" parent="obstacles" unique_id=1619135721]
+modulate = Color(1, 0.06666667, 1, 1)
+position = Vector2(406, 462)
+shape = SubResource("RectangleShape2D_1bvp3")
+debug_color = Color(0.96298605, 0.18686539, 0.14275342, 0.72156864)
+script = ExtResource("4_1bvp3")
+
+[node name="block1" type="CollisionShape2D" parent="obstacles" unique_id=1780616200]
+modulate = Color(1, 0.06666667, 1, 1)
+position = Vector2(508, 333)
+shape = SubResource("RectangleShape2D_lquwl")
+debug_color = Color(0.96298605, 0.18686539, 0.14275342, 0.72156864)
+script = ExtResource("4_1bvp3")
+
+[node name="block2" type="CollisionShape2D" parent="obstacles" unique_id=1307157822]
+modulate = Color(1, 0.06666667, 1, 1)
+position = Vector2(730.25, 83.5)
+shape = SubResource("RectangleShape2D_7mycd")
+debug_color = Color(0.96298605, 0.18686539, 0.14275342, 0.72156864)
+script = ExtResource("4_1bvp3")
+
+[node name="block4" type="CollisionShape2D" parent="obstacles" unique_id=491861472]
+modulate = Color(1, 0.06666667, 1, 1)
+position = Vector2(797, 341)
+shape = SubResource("RectangleShape2D_272bh")
+debug_color = Color(0.96298605, 0.18686539, 0.14275342, 0.72156864)
+script = ExtResource("4_1bvp3")
+
+[node name="block5" type="CollisionShape2D" parent="obstacles" unique_id=594015958]
+modulate = Color(1, 0.06666667, 1, 1)
+position = Vector2(1007, 549)
+shape = SubResource("RectangleShape2D_5vw27")
+debug_color = Color(0.96298605, 0.18686539, 0.14275342, 0.72156864)
+script = ExtResource("4_1bvp3")
