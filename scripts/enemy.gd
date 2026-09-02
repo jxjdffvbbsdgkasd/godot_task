@@ -6,6 +6,13 @@ extends CharacterBody2D
 @export var look_ahead_distance: float = 100.0
 @export var debug_draw: bool = true
 
+# Jump Parameters
+@export var can_jump: bool = true
+@export var jump_cooldown: float = 3.0
+@export var jump_max_distance: float = 220.0
+@export var jump_duration: float = 0.5
+@export var jump_height: float = 40.0
+
 var num_rays: int = 8
 var ray_directions: Array[Vector2] = []
 var interest: Array[float] = []
@@ -23,8 +30,19 @@ var chosen_direction: Vector2 = Vector2.ZERO
 
 var freeze: bool = false
 
+# Jump State
+var is_jumping: bool = false
+var jump_progress: float = 0.0
+var jump_cooldown_timer: float = 0.0
+var jump_start_pos: Vector2 = Vector2.ZERO
+var jump_target_pos: Vector2 = Vector2.ZERO
+var saved_collision_mask: int = 5
+
+@onready var color_rect: ColorRect = $ColorRect
+
 func _ready() -> void:
 	add_to_group("enemies")
+	saved_collision_mask = collision_mask
 	# Initialize 8 direction vectors
 	for i in range(num_rays):
 		var angle := i * (TAU / num_rays)
@@ -38,6 +56,31 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 		return
 
+	# Update active jump
+	if is_jumping:
+		jump_progress += delta
+		var t: float = clampf(jump_progress / jump_duration, 0.0, 1.0)
+		# Smooth jump motion
+		var ease_t := sin(t * PI * 0.5)
+		global_position = jump_start_pos.lerp(jump_target_pos, ease_t)
+		
+		# Visual 2D height arc
+		var height: float = sin(t * PI) * jump_height
+		if color_rect:
+			color_rect.position.y = -16.0 - height
+		
+		if t >= 1.0:
+			# Landed safely
+			is_jumping = false
+			collision_mask = saved_collision_mask
+			jump_cooldown_timer = jump_cooldown
+			if color_rect:
+				color_rect.position.y = -16.0
+		
+		if debug_draw:
+			queue_redraw()
+		return
+
 	if not target_player or not is_instance_valid(target_player):
 		target_player = get_tree().get_first_node_in_group("player") as Node2D
 		if target_player:
@@ -47,6 +90,7 @@ func _physics_process(delta: float) -> void:
 			return
 
 	attack_timer -= delta
+	jump_cooldown_timer -= delta
 	
 	# 1. Main target vector (towards player)
 	var to_player := target_player.global_position - global_position
@@ -74,7 +118,29 @@ func _physics_process(delta: float) -> void:
 	if not direct_result.is_empty():
 		direct_ray_blocked = true
 		obstacle_hit_normal = direct_result.get("normal", Vector2.ZERO) as Vector2
-	
+
+	# Jump logic: Check if player is hiding behind an obstacle
+	if can_jump and jump_cooldown_timer <= 0.0 and direct_ray_blocked:
+		var hit_pos: Vector2 = direct_result.get("position", global_position) as Vector2
+		var dist_to_obstacle: float = global_position.distance_to(hit_pos)
+		
+		if dist_to_obstacle <= 90.0:
+			# Raycast from player to obstacle front face to locate back face of obstacle
+			var back_query := PhysicsRayQueryParameters2D.create(target_player.global_position, hit_pos)
+			back_query.collision_mask = 1
+			var back_result: Dictionary = space_state.intersect_ray(back_query)
+			
+			if not back_result.is_empty():
+				var back_hit_pos: Vector2 = back_result.get("position", target_player.global_position) as Vector2
+				var landing_pos: Vector2 = back_hit_pos + dir_to_player * 35.0
+				var dist_to_landing: float = global_position.distance_to(landing_pos)
+				
+				if dist_to_landing <= jump_max_distance and dist_to_landing < dist_to_player:
+					_start_jump(landing_pos)
+					if debug_draw:
+						queue_redraw()
+					return
+
 	# Reset or maintain Wall-Following bypass state
 	if direct_ray_blocked:
 		if not is_bypassing:
@@ -144,6 +210,14 @@ func _physics_process(delta: float) -> void:
 	if debug_draw:
 		queue_redraw()
 
+func _start_jump(target_pos: Vector2) -> void:
+	is_jumping = true
+	jump_progress = 0.0
+	jump_start_pos = global_position
+	jump_target_pos = target_pos
+	saved_collision_mask = collision_mask
+	collision_mask = 0 # Disable obstacle collision while airborne
+
 func _attack_player() -> void:
 	if attack_timer <= 0.0 and target_player:
 		if target_player.has_method("take_damage"):
@@ -153,9 +227,21 @@ func _attack_player() -> void:
 func _on_player_died() -> void:
 	freeze = true
 	velocity = Vector2.ZERO
+	if is_jumping:
+		is_jumping = false
+		collision_mask = saved_collision_mask
+		if color_rect:
+			color_rect.position.y = -16.0
 
 func _draw() -> void:
 	if not debug_draw:
+		return
+	
+	if is_jumping:
+		# Draw jump trajectory line and landing target indicator
+		var local_target := jump_target_pos - global_position
+		draw_line(Vector2.ZERO, local_target, Color.GOLD, 3.0)
+		draw_circle(local_target, 8.0, Color.YELLOW)
 		return
 	
 	# Draw 8 Context Steering rays
