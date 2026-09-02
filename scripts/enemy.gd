@@ -13,6 +13,12 @@ extends CharacterBody2D
 @export var jump_duration: float = 0.5
 @export var jump_height: float = 40.0
 
+# Ranged Attack Parameters
+@export var can_shoot: bool = true
+@export var shoot_cooldown: float = 2.0
+@export var shoot_range: float = 400.0
+@export var projectile_scene: PackedScene = preload("res://scenes/enemy_projectile.tscn")
+
 var num_rays: int = 8
 var ray_directions: Array[Vector2] = []
 var interest: Array[float] = []
@@ -21,6 +27,7 @@ var final_weights: Array[float] = []
 
 var target_player: Node2D = null
 var attack_timer: float = 0.0
+var shoot_timer: float = 0.0
 
 # Wall-Following Bypass Hysteresis
 var is_bypassing: bool = false
@@ -91,13 +98,14 @@ func _physics_process(delta: float) -> void:
 
 	attack_timer -= delta
 	jump_cooldown_timer -= delta
+	shoot_timer -= delta
 	
 	# 1. Main target vector (towards player)
 	var to_player := target_player.global_position - global_position
 	var dist_to_player := to_player.length()
 	var dir_to_player := to_player.normalized() if dist_to_player > 0 else Vector2.ZERO
 	
-	# Check if player is within attack range
+	# Check if player is within attack range (Melee)
 	if dist_to_player <= 40.0:
 		_attack_player()
 		if freeze:
@@ -118,6 +126,11 @@ func _physics_process(delta: float) -> void:
 	if not direct_result.is_empty():
 		direct_ray_blocked = true
 		obstacle_hit_normal = direct_result.get("normal", Vector2.ZERO) as Vector2
+
+	# Ranged Attack logic: Shoot projectile when player is in direct line of sight
+	if can_shoot and not direct_ray_blocked and shoot_timer <= 0.0 and dist_to_player <= shoot_range and dist_to_player > 40.0:
+		_shoot_projectile(dir_to_player)
+		shoot_timer = shoot_cooldown
 
 	# Jump logic: Check if player is hiding behind an obstacle
 	if can_jump and jump_cooldown_timer <= 0.0 and direct_ray_blocked:
@@ -217,6 +230,16 @@ func _start_jump(target_pos: Vector2) -> void:
 	jump_target_pos = target_pos
 	saved_collision_mask = collision_mask
 	collision_mask = 0 # Disable obstacle collision while airborne
+
+func _shoot_projectile(dir: Vector2) -> void:
+	if not projectile_scene:
+		return
+	var proj := projectile_scene.instantiate() as Area2D
+	if proj:
+		proj.global_position = global_position + dir * 20.0
+		if "direction" in proj:
+			proj.set("direction", dir)
+		get_parent().add_child(proj)
 
 func _attack_player() -> void:
 	if attack_timer <= 0.0 and target_player:
