@@ -71,7 +71,7 @@ func _ready() -> void:
 		danger.append(0.0)
 		final_weights.append(0.0)
 
-	# Stagger initial shooting timers slightly so enemies don't all shoot at the exact same millisecond
+	# randomize shooting timer 
 	shoot_timer = randf_range(0.3, shoot_cooldown)
 
 func _physics_process(delta: float) -> void:
