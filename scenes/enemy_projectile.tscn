@@ -16,7 +16,7 @@ fill_to = Vector2(0.85, 0.85)
 
 [node name="EnemyProjectile" type="Area2D" unique_id=990317127]
 collision_layer = 8
-collision_mask = 3
+collision_mask = 7
 script = ExtResource("1_proj")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1032349379]

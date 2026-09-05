@@ -47,7 +47,13 @@ color = Color(0.1, 0.12, 0.15, 1)
 position = Vector2(250, 324)
 
 [node name="Enemy" parent="." unique_id=825377328 instance=ExtResource("3_enemy")]
-position = Vector2(900, 324)
+position = Vector2(880, 160)
+
+[node name="Enemy2" parent="." unique_id=825377329 instance=ExtResource("3_enemy")]
+position = Vector2(980, 330)
+
+[node name="Enemy3" parent="." unique_id=825377330 instance=ExtResource("3_enemy")]
+position = Vector2(860, 520)
 
 [node name="bounds" type="StaticBody2D" parent="." unique_id=148899280]
 disable_mode = 2

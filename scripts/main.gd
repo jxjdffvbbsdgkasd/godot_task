@@ -1,7 +1,6 @@
 extends Node2D
 
 @onready var player: CharacterBody2D = $Player
-@onready var enemy: CharacterBody2D = $Enemy
 @onready var hp_label: Label = $CanvasLayer/hp
 @onready var status_label: Label = $CanvasLayer/status
 

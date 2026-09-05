@@ -27,7 +27,7 @@ func _physics_process(_delta: float) -> void:
 	velocity = direction * speed
 	move_and_slide()
 
-func take_damage(amount: float) -> void:
+func take_damage(amount: float, _attacker: Node2D = null) -> void:
 	health -= amount
 	health_changed.emit(health)
 	if health <= 0:
