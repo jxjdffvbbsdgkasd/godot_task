@@ -10,9 +10,8 @@ signal died
 @export var debug_draw: bool = true
 
 # ranges
-@export var melee_range: float = 125.0
-@export var preferred_ranged_dist: float = 230.0 # Distance the enemy tries to maintain for shooting
-@export var shoot_range: float = 420.0
+@export var melee_range: float = 52.0
+@export var shoot_range: float = 450.0
 
 # Jump
 @export var can_jump: bool = true
@@ -156,18 +155,13 @@ func _physics_process(delta: float) -> void:
 
 	if not has_line_of_sight:
 		# Target is behind terrain/obstacle: navigate around using the assigned flank angle
-		desired_move_dir = (dir_to_target * 0.4 + flank_dir * 0.6).normalized()
+		desired_move_dir = (dir_to_target * 0.45 + flank_dir * 0.55).normalized()
 	else:
-		# In line of sight: maintain tactical distance while surrounding the target
-		if dist_to_target < preferred_ranged_dist - 40.0:
-			desired_move_dir = (-dir_to_target * 0.6 + flank_dir * 0.4).normalized()
-		elif dist_to_target > preferred_ranged_dist + 50.0:
-			desired_move_dir = (dir_to_target * 0.6 + flank_dir * 0.4).normalized()
+		# In line of sight: aggressively close distance while flanking to surround and melee
+		if dist_to_target > melee_range:
+			desired_move_dir = (dir_to_target * 0.65 + flank_dir * 0.35).normalized()
 		else:
-			desired_move_dir = flank_dir.normalized()
-
-	if dist_to_target < melee_range * 1.2:
-		desired_move_dir = dir_to_target
+			desired_move_dir = dir_to_target
 
 	# CONTEXT STEERING (16 rays): Obstacle avoidance + Ally separation
 	var alive_allies := _get_alive_allies()
