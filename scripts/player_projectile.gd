@@ -20,11 +20,12 @@ func _physics_process(delta: float) -> void:
 	global_position += direction * speed * delta
 
 func _on_body_entered(body: Node2D) -> void:
-	if body == shooter:
+	if is_instance_valid(shooter) and body == shooter:
 		return
 	
 	if body.has_method("take_damage"):
-		body.take_damage(damage, shooter)
+		var valid_shooter = shooter if is_instance_valid(shooter) else null
+		body.take_damage(damage, valid_shooter)
 		queue_free()
 	elif body is StaticBody2D or body.is_in_group("obstacles") or body.name == "bounds":
 		queue_free()

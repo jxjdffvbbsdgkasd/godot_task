@@ -80,7 +80,7 @@ func _shoot() -> void:
 			proj.set("shooter", self)
 		get_parent().add_child(proj)
 
-func take_damage(amount: float, _attacker: Node2D = null) -> void:
+func take_damage(amount: float, _attacker = null) -> void:
 	health -= amount
 	health_changed.emit(health)
 	if health <= 0:

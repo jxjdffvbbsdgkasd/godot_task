@@ -312,14 +312,14 @@ func _attack_target() -> void:
 			current_target.take_damage(attack_damage, self)
 		attack_timer = attack_cooldown
 
-func take_damage(amount: float, attacker: Node2D = null) -> void:
+func take_damage(amount: float, attacker = null) -> void:
 	health -= amount
 	flash_timer = 0.12
 	if color_rect:
 		color_rect.color = Color.WHITE
 
 	# AGGRO SWITCH: If accidentally hit by another enemy or attacker, switch aggro to attacker!
-	if attacker and is_instance_valid(attacker) and attacker != self:
+	if attacker != null and is_instance_valid(attacker) and attacker != self:
 		if "health" in attacker and attacker.health > 0:
 			current_target = attacker
 
