@@ -7,9 +7,9 @@ signal died
 @export var max_health: float = 100.0
 
 # Shooting & Spread
-@export var fire_rate: float = 0.08 # Szybkostrzelność (~12 strzałów/sek.)
-@export var bullet_damage: float = 1.0 # 1 pkt obrażeń na strzał
-@export var spread_angle_deg: float = 15.0 # Rozrzut pocisków (kąt stożka w stopniach)
+@export var fire_rate: float = 0.3
+@export var bullet_damage: float = 1.0
+@export var spread_angle_deg: float = 15.0 
 @export var projectile_scene: PackedScene = preload("res://scenes/player_projectile.tscn")
 
 var health: float

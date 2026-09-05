@@ -6,80 +6,79 @@
 [ext_resource type="Script" uid="uid://c0ujjpgnwvrt3" path="res://scripts/color_obstacles.gd" id="4_1bvp3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kek77"]
-size = Vector2(1193, 20)
+size = Vector2(1650, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4c57u"]
-size = Vector2(1176, 24)
+size = Vector2(1650, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_efxa6"]
-size = Vector2(20, 646)
+size = Vector2(24, 950)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dg77c"]
-size = Vector2(24, 663)
+size = Vector2(24, 950)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h2yge"]
-size = Vector2(117.5, 87)
+size = Vector2(140, 100)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1bvp3"]
-size = Vector2(151, 144)
+size = Vector2(180, 160)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lquwl"]
-size = Vector2(120, 115.5)
+size = Vector2(150, 140)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7mycd"]
-size = Vector2(34.5, 165)
+size = Vector2(42, 210)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_272bh"]
-size = Vector2(48.5, 215)
+size = Vector2(55, 270)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5vw27"]
-size = Vector2(91.5, 105)
+size = Vector2(115, 125)
 
 [node name="Main" type="Node2D" unique_id=239041911]
 script = ExtResource("1_main")
 
 [node name="Background" type="ColorRect" parent="." unique_id=1563695956]
-offset_right = 1152.0
-offset_bottom = 648.0
+offset_right = 1600.0
+offset_bottom = 900.0
 color = Color(0.1, 0.12, 0.15, 1)
 
 [node name="Player" parent="." unique_id=144482437 instance=ExtResource("2_player")]
-position = Vector2(250, 324)
+position = Vector2(280, 450)
 
 [node name="Enemy" parent="." unique_id=825377328 instance=ExtResource("3_enemy")]
-position = Vector2(880, 160)
+position = Vector2(1250, 230)
 
 [node name="Enemy2" parent="." unique_id=825377329 instance=ExtResource("3_enemy")]
-position = Vector2(980, 330)
+position = Vector2(1420, 450)
 
 [node name="Enemy3" parent="." unique_id=825377330 instance=ExtResource("3_enemy")]
-position = Vector2(860, 520)
+position = Vector2(1250, 700)
 
 [node name="bounds" type="StaticBody2D" parent="." unique_id=148899280]
 disable_mode = 2
 
 [node name="top" type="CollisionShape2D" parent="bounds" unique_id=1357452563]
-position = Vector2(576.5, -8)
+position = Vector2(800, -12)
 shape = SubResource("RectangleShape2D_kek77")
-one_way_collision_margin = 10.5
 
 [node name="bottom" type="CollisionShape2D" parent="bounds" unique_id=448162490]
-position = Vector2(562, 661)
+position = Vector2(800, 912)
 shape = SubResource("RectangleShape2D_4c57u")
 
 [node name="left" type="CollisionShape2D" parent="bounds" unique_id=982536135]
-position = Vector2(-11, 325)
+position = Vector2(-12, 450)
 shape = SubResource("RectangleShape2D_efxa6")
 
 [node name="right" type="CollisionShape2D" parent="bounds" unique_id=864076743]
-position = Vector2(1162, 333.5)
+position = Vector2(1612, 450)
 shape = SubResource("RectangleShape2D_dg77c")
 
 [node name="obstacles" type="StaticBody2D" parent="." unique_id=1884660402]
 
 [node name="block6" type="CollisionShape2D" parent="obstacles" unique_id=763582442]
 modulate = Color(1, 1, 1, 0.5019608)
-position = Vector2(271, 151)
+position = Vector2(380, 220)
 shape = SubResource("RectangleShape2D_h2yge")
 debug_color = Color(1, 1, 1, 0)
 script = ExtResource("4_1bvp3")
@@ -87,7 +86,7 @@ draw_color = Color(0.10980392, 0.6431373, 0.9843137, 0.84313726)
 
 [node name="block3" type="CollisionShape2D" parent="obstacles" unique_id=1619135721]
 modulate = Color(1, 1, 1, 0.5019608)
-position = Vector2(406, 462)
+position = Vector2(560, 640)
 shape = SubResource("RectangleShape2D_1bvp3")
 debug_color = Color(1, 1, 1, 0)
 script = ExtResource("4_1bvp3")
@@ -95,7 +94,7 @@ draw_color = Color(0.10980392, 0.6431373, 0.9843137, 0.84313726)
 
 [node name="block1" type="CollisionShape2D" parent="obstacles" unique_id=1780616200]
 modulate = Color(1, 1, 1, 0.5019608)
-position = Vector2(508, 333)
+position = Vector2(720, 450)
 shape = SubResource("RectangleShape2D_lquwl")
 debug_color = Color(1, 1, 1, 0)
 script = ExtResource("4_1bvp3")
@@ -103,7 +102,7 @@ draw_color = Color(0.10980392, 0.6431373, 0.9843137, 0.84313726)
 
 [node name="block2" type="CollisionShape2D" parent="obstacles" unique_id=1307157822]
 modulate = Color(1, 1, 1, 0.5019608)
-position = Vector2(730.25, 83.5)
+position = Vector2(1040, 130)
 shape = SubResource("RectangleShape2D_7mycd")
 debug_color = Color(1, 1, 1, 0)
 script = ExtResource("4_1bvp3")
@@ -111,7 +110,7 @@ draw_color = Color(0.10980392, 0.6431373, 0.9843137, 0.84313726)
 
 [node name="block4" type="CollisionShape2D" parent="obstacles" unique_id=491861472]
 modulate = Color(1, 1, 1, 0.5019608)
-position = Vector2(797, 341)
+position = Vector2(1130, 470)
 shape = SubResource("RectangleShape2D_272bh")
 debug_color = Color(1, 1, 1, 0)
 script = ExtResource("4_1bvp3")
@@ -119,7 +118,7 @@ draw_color = Color(0.10980392, 0.6431373, 0.9843137, 0.84313726)
 
 [node name="block5" type="CollisionShape2D" parent="obstacles" unique_id=594015958]
 modulate = Color(1, 1, 1, 0.5019608)
-position = Vector2(1007, 549)
+position = Vector2(1420, 770)
 shape = SubResource("RectangleShape2D_5vw27")
 debug_color = Color(1, 1, 1, 0)
 script = ExtResource("4_1bvp3")
@@ -128,13 +127,15 @@ draw_color = Color(0.10980392, 0.6431373, 0.9843137, 0.84313726)
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1112896058]
 
 [node name="hp" type="Label" parent="CanvasLayer" unique_id=2081947531]
-offset_right = 122.0
-offset_bottom = 48.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 180.0
+offset_bottom = 68.0
 
 [node name="status" type="Label" parent="CanvasLayer" unique_id=1310091693]
 anchors_preset = -1
-offset_left = 393.0
-offset_top = 240.0
-offset_right = 829.0
-offset_bottom = 396.0
+offset_left = 580.0
+offset_top = 370.0
+offset_right = 1020.0
+offset_bottom = 530.0
 theme_override_font_sizes/font_size = 80
