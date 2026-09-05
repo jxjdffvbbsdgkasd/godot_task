@@ -3,10 +3,19 @@ extends Node2D
 @onready var player: CharacterBody2D = $Player
 @onready var hp_label: Label = $CanvasLayer/hp
 @onready var status_label: Label = $CanvasLayer/status
+@onready var background: ColorRect = $Background
+@onready var top_wall: CollisionShape2D = $bounds/top
+@onready var bottom_wall: CollisionShape2D = $bounds/bottom
+@onready var left_wall: CollisionShape2D = $bounds/left
+@onready var right_wall: CollisionShape2D = $bounds/right
 
 var is_game_over: bool = false
 
 func _ready() -> void:
+	# Adapt map boundaries and background to current viewport/window size
+	get_viewport().size_changed.connect(_update_map_to_window)
+	_update_map_to_window()
+
 	if player:
 		player.health_changed.connect(_on_player_health_changed)
 		player.died.connect(_on_player_died)
@@ -16,6 +25,31 @@ func _ready() -> void:
 	for e in enemies:
 		if e.has_signal("died"):
 			e.died.connect(_on_enemy_died)
+
+func _update_map_to_window() -> void:
+	var view_size := get_viewport_rect().size
+	if background:
+		background.size = view_size
+	
+	if top_wall and top_wall.shape is RectangleShape2D:
+		var s := top_wall.shape as RectangleShape2D
+		s.size = Vector2(view_size.x + 200.0, 40.0)
+		top_wall.position = Vector2(view_size.x * 0.5, -20.0)
+		
+	if bottom_wall and bottom_wall.shape is RectangleShape2D:
+		var s := bottom_wall.shape as RectangleShape2D
+		s.size = Vector2(view_size.x + 200.0, 40.0)
+		bottom_wall.position = Vector2(view_size.x * 0.5, view_size.y + 20.0)
+		
+	if left_wall and left_wall.shape is RectangleShape2D:
+		var s := left_wall.shape as RectangleShape2D
+		s.size = Vector2(40.0, view_size.y + 200.0)
+		left_wall.position = Vector2(-20.0, view_size.y * 0.5)
+		
+	if right_wall and right_wall.shape is RectangleShape2D:
+		var s := right_wall.shape as RectangleShape2D
+		s.size = Vector2(40.0, view_size.y + 200.0)
+		right_wall.position = Vector2(view_size.x + 20.0, view_size.y * 0.5)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") or (event is InputEventKey and event.pressed and event.keycode == KEY_R):
